@@ -6,17 +6,20 @@ from bs4 import BeautifulSoup
 import os  
 import re	
 from zhihuLogIn import isLogin,login
-#import temp
+from globalClass import *
+import time
 
 import requests.packages.urllib3.util.ssl_
 requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
 
-#urlFirst = "https://www.zhihu.com/collection/60771406?page=1"#指定的URL	 
+#urlFirst = "https://www.zhihu.com/collection/60771406?page=1"#指定的URL
+count = globalClass()
   
 def download(_url,name):#下载函数  
 	if(_url==None):#地址若为None则跳过	 
 		pass  
 	resDown = urlopen(_url)#打开链接  
+	time.sleep(0.25) # 时间间隔为0.5s发送一次抓取请求，减轻hoj服务器压力
 	if (resDown.getcode() == 200):
 		data=resDown.read()#否则开始下载到本地  
 		with open(name, "wb") as code:
@@ -33,12 +36,8 @@ def GetCollectionPages(url):
 	
 	soup = BeautifulSoup(respond,"lxml")
 	lstPages = []#create lstPages Obj
-	
-	#prepare for Pages loop
-	count = 0 #Counting
-	#for page in soup.find_all()
 
-def AfterLogIn(url,countMain):
+def AfterLogIn(url):
 
 	print('start AfterLogIn')
 	
@@ -77,15 +76,15 @@ def AfterLogIn(url,countMain):
 			lstImg.append(addressImg)
 
 	s = set(lstImg)
-	count = 0 #Counting
+	
 
 	for address in s:  
 		if(address!=None):	
-			pathName="E:\\2666\\"+ str(countMain) +".jpg"#设置路径和文件名	
-			download(address,pathName)#下载  
-			count=count+1#计数君+1
-			countMain = countMain+1
-			print ("正在下载第：",countMain)
+			pathName="E:\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名	
+			download(address,pathName)#下载 
+			print ("正在下载第：",count.z)			
+			count.z=count.z+1#计数君+1
+
 	
 	#for linkNextPage in soup.find_all()
 

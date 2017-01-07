@@ -6,69 +6,55 @@ from meizhi.items import MeizhiItem
 import random
 
 import meizhi.zhihuLogIn
-from meizhi.zhihuLogIn import isLogin,login
-import requests
-try:
-	import cookielib
-except:
-	import http.cookiejar as cookielib
-import time
-import os.path
-try:
-	from PIL import Image
-except:
-	pass
+from meizhi.zhihuLogIn import isLogin,login,get_session
 
 class Spider(scrapy.Spider):
 	
 	# 构造 Request headers
-	agent = 'Mozilla/5.0 (Windows NT 5.1; rv:33.0) Gecko/20100101 Firefox/33.0'
-	headers = {
-		"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-		"Accept-Encoding": "gzip,deflate",
-		"Accept-Language": "en-US,en;q=0.8,zh-TW;q=0.6,zh;q=0.4",
-		"Connection": "keep-alive",
-		"Content-Type":" application/x-www-form-urlencoded; charset=UTF-8",
-		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/48.0.2564.97 Safari/537.36",
-		"Referer": "http://www.zhihu.com"
-	}
-
-	# 使用登录cookie信息
-	session = requests.session()
-	session.cookies = cookielib.LWPCookieJar(filename='cookies')
-	try:
-		session.cookies.load(ignore_discard=True)
-	except:
-		print("Cookie 未能加载")
+	# headers = {
+		# 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+		# 'Accept-Encoding':'gzip, deflate, sdch, br',
+		# 'Accept-Language':'zh-CN,zh;q=0.8',
+		# 'Connection':'keep-alive',
+		# 'Cache-Control':'max-age=0'
+		# ,'Host':'www.zhihu.com'
+		# ,'Upgrade-Insecure-Requests':'1'
+		# ,'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36'
+	# }
 
 	name = "meizhi"
 	allow_domains = ["https://www.zhihu.com/"]
 	start_url_head = "https://www.zhihu.com/collection/38624707?page=1"
-	
-	# def __init__(self, *args, **kwargs):
-		# super(Spider, self).__init__(*args, **kwargs)
-		# self.xsrf = ''
 		
 	def start_requests(self):
-		if isLogin():
-			print ('you have already loged in')
-			yield meizhi.zhihuLogIn.session.get(self.start_url_head, self.after_login)
-
+		if meizhi.zhihuLogIn.isLogin:
+			print ("you have loged in")
+			_s = get_session
+			cookie = _s.cookies
+			return Request(start_url_head,cookie,callback = after_login)
 		else:
-			account = input('请输入你的用户名\n>  ')
-			secret = input("请输入你的密码\n>	")
-			login(secret, account)
-			print ('ok,now you are loged in')
+			print ("you should log in now")
 			
-			yield session.get(self.start_url_head, callback = self.after_login)
-			
+	def post_login(self, response):
+		pirnt('Preparing login')
+		xsrf = Selector(response).xpath('//input[@name = "_xsrf"]/@value').extract()[0]
+		print (xsrf)
 		
-	def after_login(self, response):
-		pirnt('you are in the after_login')
+		return FormRequest.from_response(response, #'http://www.zhihu.com/#signin'
+							meta = {"cookiejar" : 1},
+							headers = self.headers,
+							formdata = {
+							'_xsrf' : xsrf,
+							'email' : 'zeta221@163.com',
+							'password' : 'cdefgab',
+							'remember_me' : 'true'
+							},
+							callback = self.after_login,
+							)
 
 		
-	def parse_firstpage(self,response):
-		print ('get in the parse_firstpage')
+	def after_login(self,response):
+		print ('get in the after_signin')
 		exit(0)
 		
 		

@@ -1,5 +1,4 @@
 
-countMain = 0
-
-class clsGlobal:
-	z = 77
+class globalClass:
+	def __init__(self):
+		self.z = 1

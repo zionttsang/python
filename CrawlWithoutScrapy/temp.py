@@ -1,23 +1,27 @@
 
 import zhihuLogIn
 import tt
-import globalClass
 import urllib.request
 from bs4 import BeautifulSoup
 import globalClass
 
-urlOrigin = ""
-urlFirst = "https://www.zhihu.com/collection/60771406?page="
+# urlFirst = "https://www.zhihu.com/collection/60771406?page=" #daxiong
+urlFirst = "https://www.zhihu.com/collection/38624707?page=" #baozhao
+pageNum = 67
 
 def main(url):
+	import requests.packages.urllib3.util.ssl_
+	print(requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS)
+	requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
+	
 	if zhihuLogIn.isLogin():
 		print('您已经登录')
 		
-		for i in range(50):
+		for i in range(pageNum):
 			urlTemp = urlFirst + str(i+1)
 			print("urlTemp: ",urlTemp)
 			
-			tt.AfterLogIn(urlTemp,i)
+			tt.AfterLogIn(urlTemp)
 	else:
 		account = input('请输入你的用户名\n>  ')
 		secret = input("请输入你的密码\n>	")

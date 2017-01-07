@@ -128,6 +128,11 @@ try:
     input = raw_input
 except:
     pass
+	
+
+def get_session():
+	print("give me the session now")
+	return session
 
 
 if __name__ == '__main__':

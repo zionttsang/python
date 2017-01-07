@@ -9,8 +9,14 @@
 # response = requests.get("https://www.12306.cn",verify = False)
 # print (response.status_code)
 
-from urllib import request
+import requests,os
 
-req = request.Request('http://www.baidu.com/')
-res = request.urlopen(req)
-print ("res code:",res.getcode())
+class test():
+	def __init__(self):
+		self.print_what_i_need()
+
+	def print_what_i_need(self):
+		print ("i have get in what i need")
+		
+if __name__ == "__main__":
+	z = test()
