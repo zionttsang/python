@@ -10,9 +10,6 @@ urlFirst = "https://www.zhihu.com/collection/38624707?page=" #baozhao
 pageNum = 67
 
 def main(url):
-	import requests.packages.urllib3.util.ssl_
-	print(requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS)
-	requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
 	
 	if zhihuLogIn.isLogin():
 		print('您已经登录')
