@@ -11,46 +11,55 @@ from meizhi.zhihuLogIn import isLogin,login,get_session
 class Spider(scrapy.Spider):
 	
 	# 构造 Request headers
-	# headers = {
-		# 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-		# 'Accept-Encoding':'gzip, deflate, sdch, br',
-		# 'Accept-Language':'zh-CN,zh;q=0.8',
-		# 'Connection':'keep-alive',
-		# 'Cache-Control':'max-age=0'
-		# ,'Host':'www.zhihu.com'
-		# ,'Upgrade-Insecure-Requests':'1'
-		# ,'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36'
-	# }
+	headers = {
+		'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+		'Accept-Encoding':'gzip, deflate, sdch, br',
+		'Accept-Language':'zh-CN,zh;q=0.8',
+		'Connection':'keep-alive',
+		'Cache-Control':'max-age=0'
+		,'Host':'www.zhihu.com'
+		,'Upgrade-Insecure-Requests':'1'
+		,'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36'
+	}
 
 	name = "meizhi"
 	allow_domains = ["https://www.zhihu.com/"]
-	start_url_head = "https://www.zhihu.com/collection/38624707?page=1"
+	start_url_head = 'http://www.zhihu.com/#signin'
 		
 	def start_requests(self):
-		if meizhi.zhihuLogIn.isLogin:
+		if meizhi.zhihuLogIn.isLogin():
 			print ("you have loged in")
-			_s = get_session
-			cookie = _s.cookies
-			return Request(start_url_head,cookie,callback = after_login)
 		else:
-			print ("you should log in now")
-			
-	def post_login(self, response):
-		pirnt('Preparing login')
-		xsrf = Selector(response).xpath('//input[@name = "_xsrf"]/@value').extract()[0]
-		print (xsrf)
+			print("you need log in now")
+			meizhi.login()
 		
-		return FormRequest.from_response(response, #'http://www.zhihu.com/#signin'
-							meta = {"cookiejar" : 1},
-							headers = self.headers,
-							formdata = {
-							'_xsrf' : xsrf,
-							'email' : 'zeta221@163.com',
-							'password' : 'cdefgab',
-							'remember_me' : 'true'
-							},
-							callback = self.after_login,
-							)
+		global session
+		session = meizhi.zhihuLogIn.get_session()
+		print("now we print session")
+		print(session)
+		print("now we finished pirnt session")
+		
+		return Request("https://www.zhihu.com/collection/38624707?page=1",session.cookies,self.headers,self.after_login)
+		
+
+	#every login must followed with headers and meta
+	
+	# def post_login(self, response):
+		# pirnt('Preparing login')
+		# xsrf = Selector(response).xpath('//input[@name = "_xsrf"]/@value').extract()[0]
+		# print (xsrf)
+		
+		# return scrapy.FormRequest.from_response(response, #'http://www.zhihu.com/#signin'
+							# meta = {"cookiejar" : 1},
+							# headers = self.headers,
+							# formdata = {
+							# '_xsrf' : xsrf,
+							# 'email' : 'zeta221@163.com',
+							# 'password' : 'cdefgab',
+							# 'remember_me' : 'true'
+							# },
+							# callback = self.after_login,
+							# )
 
 		
 	def after_login(self,response):
