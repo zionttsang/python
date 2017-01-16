@@ -83,15 +83,16 @@ if __name__ == "__main__":
 	
 	dir_list = os.listdir(dir)
 	for this_dir in dir_list:
-		if os.is_dir(this_dir):
-			print("this dir:",this_dir)
+		# if os.path.isdir(this_dir):
+			# print("this dir:",this_dir)
 			this_dir = dir + this_dir
 			try:
 				os.removedirs(this_dir)
 				print(this_dir,"has been removed")
 			except:
+				print("i dont think i can show up")
 				pass
-		else:
-			continue
+		# else:
+			# continue
 			
 
