@@ -74,8 +74,24 @@ def AfterLogIn(url):
 			download(address,pathName)#下载 
 			print ("正在下载第：",count.z)			
 			count.z=count.z+1#计数君+1
+			
 
+import os, sys
 
-if __name__ == '__main__': 
-	import ssl
-	print(ssl.OPENSSL_VERSION)
+if __name__ == "__main__":
+	dir = input("dir:")
+	
+	dir_list = os.listdir(dir)
+	for this_dir in dir_list:
+		if os.is_dir(this_dir):
+			print("this dir:",this_dir)
+			this_dir = dir + this_dir
+			try:
+				os.removedirs(this_dir)
+				print(this_dir,"has been removed")
+			except:
+				pass
+		else:
+			continue
+			
+
