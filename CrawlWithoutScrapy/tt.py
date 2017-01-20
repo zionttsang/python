@@ -86,11 +86,12 @@ if __name__ == "__main__":
 		# if os.path.isdir(this_dir):
 			# print("this dir:",this_dir)
 			this_dir = dir + this_dir
+			print("this dir:",this_dir.encode("gbk","ignore"))
 			try:
 				os.removedirs(this_dir)
 				print(this_dir,"has been removed")
 			except:
-				print("i dont think i can show up")
+				print("this dir is not empty or not a dir")
 				pass
 		# else:
 			# continue
