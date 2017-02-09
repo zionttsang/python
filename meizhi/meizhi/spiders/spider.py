@@ -1,6 +1,7 @@
 import re
 import scrapy
 from bs4 import BeautifulSoup
+from scrapy.selector import Selector
 from scrapy.http import Request
 from meizhi.items import MeizhiItem
 import random
@@ -27,49 +28,53 @@ class Spider(scrapy.Spider):
 	start_url_head = 'http://www.zhihu.com/#signin'
 		
 	def start_requests(self):
-		if meizhi.zhihuLogIn.isLogin():
-			print ("you have loged in")
-		else:
-			print("you need log in now")
-			meizhi.login()
+		# account = input("account: ")
+		# secret = input("password: ")
+		# if meizhi.zhihuLogIn.isLogin():
+			# print ("you have loged in")
+		# else:
+			# print("you need log in now")
+			# meizhi.zhihuLogIn.login(secret,account)
 		
-		global session
-		session = meizhi.zhihuLogIn.get_session()
-		print("now we print session")
-		print(session)
-		print("now we finished pirnt session")
+		# global session
+		# session = meizhi.zhihuLogIn.get_session()
+		# print("now we print session")
+		# print(session)
+		# print("now we finished pirnt session")
 		
-		return Request("https://www.zhihu.com/collection/38624707?page=1",session.cookies,self.headers,self.after_login)
-		
-
-	#every login must followed with headers and meta
-	
-	# def post_login(self, response):
-		# pirnt('Preparing login')
-		# xsrf = Selector(response).xpath('//input[@name = "_xsrf"]/@value').extract()[0]
-		# print (xsrf)
-		
-		# return scrapy.FormRequest.from_response(response, #'http://www.zhihu.com/#signin'
-							# meta = {"cookiejar" : 1},
-							# headers = self.headers,
-							# formdata = {
-							# '_xsrf' : xsrf,
-							# 'email' : 'zeta221@163.com',
-							# 'password' : 'cdefgab',
-							# 'remember_me' : 'true'
-							# },
-							# callback = self.after_login,
-							# )
+		yield Request("https://www.zhihu.com/collection/38624707?page=1",headers = self.headers, callback = self.after_login)
 
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
-		exit(0)
 		
+		sel = Selector(response)
+		for link in sel.xpath("//body//div//link/@href").extract():
+			link_full = "https://www.zhihu.com" + link
+			print ("link_full: ",link_full)
+			
+			yield Request(link_full, headers = self.headers, callback = self.parse_answer)
 		
-	def parse_err(self, response):
-		log.ERROR('crawl {} failed'.format(response.url))
+	def parse_answer(self,response):
+		print("get in the parse_answer")
 		
+		sel = Selector(response)
+		item = MeizhiItem()
+		l = ItemLoader(item = MeizhiItem(), response = response)
+		l.add_xpath('image_urls',"//body//div//main//div//span/img/@data-original",Identity()
+		
+		return l.load_item()
+		
+		# print ("text_test: ",sel.xpath('/body//div/main//div/span/img'))
+		
+		# for pic_url in sel.xpath("//body//div//main//div//span/img"):
+		
+			# test_image = pic_url.xpath("./@data-original").extract()[0]
+			# print ("item: ",pic_url.xpath("./@data-original").extract()[0])
+			
+			# item['image_urls'] = [pic_url.xpath("./@data-original").extract()[0]]
+			# yield item
+	
 	def get_xsrf(self):
 		'''_xsrf 是一个动态变化的参数'''
 		index_url = 'https://www.zhihu.com'
