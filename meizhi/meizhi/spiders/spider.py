@@ -6,8 +6,13 @@ from scrapy.http import Request
 from meizhi.items import MeizhiItem
 import random
 
-import meizhi.zhihuLogIn
-from meizhi.zhihuLogIn import isLogin,login,get_session
+from scrapy.contrib.loader import ItemLoader, Identity
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+import time
+
+# import meizhi.zhihuLogIn
+# from meizhi.zhihuLogIn import isLogin,login,get_session
 
 class Spider(scrapy.Spider):
 	
@@ -25,7 +30,7 @@ class Spider(scrapy.Spider):
 
 	name = "meizhi"
 	allow_domains = ["https://www.zhihu.com/"]
-	start_url_head = 'http://www.zhihu.com/#signin'
+	# start_url_head = 'http://www.zhihu.com/#signin'
 		
 	def start_requests(self):
 		# account = input("account: ")
@@ -44,11 +49,26 @@ class Spider(scrapy.Spider):
 		
 		yield Request("https://www.zhihu.com/collection/38624707?page=1",headers = self.headers, callback = self.after_login)
 
+	def __init__(self):
+		# self.dcap = dict(DesiredCapabilities.PHANTOMJS)
+		# self.dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0")
+		
+		self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+		
+	def __del__(self):
+		self.driver.close()
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
 		
+		# self.driver.get(response.url)
+		# print("log:",response.text.encode("gbk","ignore"))
+		# exit(0)
+		
+		# item = MeizhiItem()
+		
 		sel = Selector(response)
+		
 		for link in sel.xpath("//body//div//link/@href").extract():
 			link_full = "https://www.zhihu.com" + link
 			print ("link_full: ",link_full)
@@ -57,51 +77,43 @@ class Spider(scrapy.Spider):
 		
 	def parse_answer(self,response):
 		print("get in the parse_answer")
+		# print ("res text: ",response.text.encode("gbk","ignore"))
+		
+		# html = response.text
+		# soup = BeautifulSoup(html)
 		
 		sel = Selector(response)
 		item = MeizhiItem()
-		l = ItemLoader(item = MeizhiItem(), response = response)
-		l.add_xpath('image_urls',"//body//div//main//div//span/img/@data-original",Identity()
 		
-		return l.load_item()
+		# start browser
+		self.driver.get(response.url)
 		
-		# print ("text_test: ",sel.xpath('/body//div/main//div/span/img'))
+		print ("log: ",response.text.encode("gbk","ignore"))
+		# exit(0)
 		
-		# for pic_url in sel.xpath("//body//div//main//div//span/img"):
+		# loading time interval
+		time.sleep(2)
 		
-			# test_image = pic_url.xpath("./@data-original").extract()[0]
-			# print ("item: ",pic_url.xpath("./@data-original").extract()[0])
-			
-			# item['image_urls'] = [pic_url.xpath("./@data-original").extract()[0]]
+		# l = ItemLoader(item = MeizhiItem(), response = response)
+		
+		# print ("length of the images: ",len(soup.find_all("img")))
+		# exit()
+		# for tag_image in soup.find_all("img"):
+			# link_image = tag_image.get("data-original")
+			# if link_image != None:
+				# print ("link_image: ",link_image)
+				# item["image_urls"] = link_image
+				# l.add_xpath("image_urls",link_image, Identity())
+			# else:
+				# continue
+				
 			# yield item
-	
-	def get_xsrf(self):
-		'''_xsrf 是一个动态变化的参数'''
-		index_url = 'https://www.zhihu.com'
-		# 获取登录时需要用到的_xsrf
-		index_page = session.get(index_url, headers=headers)
-		html = index_page.text
-		pattern = r'name="_xsrf" value="(.*?)"'
-		# 这里的_xsrf 返回的是一个list
-		_xsrf = re.findall(pattern, html)
-		return _xsrf[0]
-
-
-	# 获取验证码
-	def get_captcha(self):
-		t = str(int(time.time() * 1000))
-		captcha_url = 'https://www.zhihu.com/captcha.gif?r=' + t + "&type=login"
-		r = session.get(captcha_url, headers=headers)
-		with open('captcha.jpg', 'wb') as f:
-			f.write(r.content)
-			f.close()
-		# 用pillow 的 Image 显示验证码
-		# 如果没有安装 pillow 到源代码所在的目录去找到验证码然后手动输入
-		try:
-			im = Image.open('captcha.jpg')
-			im.show()
-			im.close()
-		except:
-			print(u'请到 %s 目录找到captcha.jpg 手动输入' % os.path.abspath('captcha.jpg'))
-		captcha = input("please input the captcha\n>")
-		return captcha
+		
+		for pic_url in sel.xpath("//body//div//main//div//span[@class = 'RichText CopyrightRichText-richText']"):		
+			image_urls = pic_url.xpath("/@data-original").extract()[0]
+			# l.add_xpath('image_urls', "//@data-original", Identity())
+			print ("item: ",image_urls)			
+			# item['image_urls'] = [pic_url.xpath("/@data-original").extract()[0]]
+			yield item
+			
+			# return l.load_item()

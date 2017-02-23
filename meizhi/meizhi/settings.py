@@ -16,8 +16,9 @@ NEWSPIDER_MODULE = 'meizhi.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36'
-
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) ' \
+             'AppleWebKit/537.36 (KHTML, like Gecko) ' \
+             'Chrome/49.0.2623.87 Safari/537.36'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
@@ -67,7 +68,9 @@ DOWNLOAD_DELAY = 1
 ITEM_PIPELINES = {
    'meizhi.pipelines.ImageDownloadPipeline': 1,
 }
-IMAGES_STORE = 'E:\\2666\\'
+IMAGES_STORE = '/data/'
+# IMAGES_URLS_FIELD = 'image_urls'
+# IMAGES_RESULT_FIELD = 'images'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

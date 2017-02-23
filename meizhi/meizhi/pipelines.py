@@ -7,5 +7,6 @@
 
 
 class ImageDownloadPipeline(object):
-    def process_item(self, item, spider):
-        return item
+	def process_item(self, item, spider):
+		# print ("SAVE PATH: ",setting.IMAGE_STORE)
+		return item

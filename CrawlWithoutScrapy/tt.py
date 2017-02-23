@@ -52,6 +52,7 @@ def AfterLogIn(url):
 			
 		try:
 			reqAnswer = urlopen(addressLinkFull)
+			# time.sleep(1)
 		except URLError as e:
 			print("bad path!!")
 			print(e.reason)
