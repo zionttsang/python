@@ -5,6 +5,7 @@ from scrapy.selector import Selector
 from scrapy.http import Request
 from meizhi.items import MeizhiItem
 import random
+import requests
 
 from scrapy.contrib.loader import ItemLoader, Identity
 from selenium import webdriver
@@ -55,8 +56,8 @@ class Spider(scrapy.Spider):
 		
 		self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
 		
-	def __del__(self):
-		self.driver.close()
+	# def __del__(self):
+		# self.driver.close()
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
@@ -86,9 +87,18 @@ class Spider(scrapy.Spider):
 		item = MeizhiItem()
 		
 		# start browser
-		self.driver.get(response.url)
+		# driver = self.driver
 		
-		print ("log: ",response.text.encode("gbk","ignore"))
+		self.driver.execute_script("window.scrollBy(0,10000)")
+		time.sleep(3)
+		self.driver.execute_script("window.scrollBy(0,20000)")
+		time.sleep(3)
+		self.driver.execute_script("window.scrollBy(0,30000)")
+		time.sleep(3)
+		self.driver.execute_script("window.scrollBy(0,40000)")
+		time.sleep(5)
+		
+		# print ("log: ",response.text.encode("gbk","ignore"))
 		# exit(0)
 		
 		# loading time interval
