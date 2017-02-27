@@ -119,10 +119,14 @@ class Spider(scrapy.Spider):
 				
 			# yield item
 		
-		for pic_url in sel.xpath("//body//div//main//div//span[@class = 'RichText CopyrightRichText-richText']"):		
-			image_urls = pic_url.xpath("/@data-original").extract()[0]
+		# //*[@id="root"]/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img[2]
+		# //*[@id="root"]/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img[1]
+		for pic_url in sel.xpath("//*[@id='root']/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img"):
+			print ("in circle")
+			print ("item: ",pic_url.xpath("/@data-original").extract()[0])			
+			item['image_urls'] = pic_url.xpath("/@data-original").extract()[0]
 			# l.add_xpath('image_urls', "//@data-original", Identity())
-			print ("item: ",image_urls)			
+			# print ("item: ",image_urls)			
 			# item['image_urls'] = [pic_url.xpath("/@data-original").extract()[0]]
 			yield item
 			

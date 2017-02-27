@@ -68,7 +68,7 @@ DOWNLOAD_DELAY = 1
 ITEM_PIPELINES = {
    'meizhi.pipelines.ImageDownloadPipeline': 1,
 }
-IMAGES_STORE = '/data/'
+IMAGES_STORE = './data/'
 # IMAGES_URLS_FIELD = 'image_urls'
 # IMAGES_RESULT_FIELD = 'images'
 
