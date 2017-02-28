@@ -50,18 +50,17 @@ class Spider(scrapy.Spider):
 		
 		yield Request("https://www.zhihu.com/collection/38624707?page=1",headers = self.headers, callback = self.after_login)
 
-	def __init__(self):
+	# def __init__(self):
 		# self.dcap = dict(DesiredCapabilities.PHANTOMJS)
 		# self.dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0")
 		
-		self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+		# self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
 		
 	# def __del__(self):
 		# self.driver.close()
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
-		
 		# self.driver.get(response.url)
 		# print("log:",response.text.encode("gbk","ignore"))
 		# exit(0)
@@ -79,6 +78,7 @@ class Spider(scrapy.Spider):
 	def parse_answer(self,response):
 		print("get in the parse_answer")
 		# print ("res text: ",response.text.encode("gbk","ignore"))
+		# print ("response: ",response.text.encode("gbk","ignore"))
 		
 		# html = response.text
 		# soup = BeautifulSoup(html)
@@ -89,45 +89,23 @@ class Spider(scrapy.Spider):
 		# start browser
 		# driver = self.driver
 		
-		self.driver.execute_script("window.scrollBy(0,10000)")
-		time.sleep(3)
-		self.driver.execute_script("window.scrollBy(0,20000)")
-		time.sleep(3)
-		self.driver.execute_script("window.scrollBy(0,30000)")
-		time.sleep(3)
-		self.driver.execute_script("window.scrollBy(0,40000)")
-		time.sleep(5)
+		# self.driver.execute_script("window.scrollBy(0,10000)")
+		# time.sleep(1)
+		# self.driver.execute_script("window.scrollBy(0,20000)")
+		# time.sleep(1)
+		# self.driver.execute_script("window.scrollBy(0,30000)")
+		# time.sleep(1)
+		# self.driver.execute_script("window.scrollBy(0,40000)")
+		# time.sleep(3)
 		
 		# print ("log: ",response.text.encode("gbk","ignore"))
 		# exit(0)
 		
 		# loading time interval
-		time.sleep(2)
-		
-		# l = ItemLoader(item = MeizhiItem(), response = response)
-		
-		# print ("length of the images: ",len(soup.find_all("img")))
-		# exit()
-		# for tag_image in soup.find_all("img"):
-			# link_image = tag_image.get("data-original")
-			# if link_image != None:
-				# print ("link_image: ",link_image)
-				# item["image_urls"] = link_image
-				# l.add_xpath("image_urls",link_image, Identity())
-			# else:
-				# continue
-				
-			# yield item
-		
-		# //*[@id="root"]/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img[2]
-		# //*[@id="root"]/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img[1]
-		for pic_url in sel.xpath("//*[@id='root']/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span/img"):
+		# time.sleep(2)
+
+		for pic_url in sel.xpath("//*[@id='root']/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span"):
 			print ("in circle")
-			print ("item: ",pic_url.xpath("/@data-original").extract()[0])			
-			item['image_urls'] = pic_url.xpath("/@data-original").extract()[0]
-			# l.add_xpath('image_urls', "//@data-original", Identity())
-			# print ("item: ",image_urls)			
-			# item['image_urls'] = [pic_url.xpath("/@data-original").extract()[0]]
+			# print ("item: ",pic_url.xpath("/@data-original").extract()[0])			
+			item['image_urls'] = [pic_url.xpath(".//img/@data-original").extract()[0]]
 			yield item
-			
-			# return l.load_item()
