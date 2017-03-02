@@ -1,19 +1,22 @@
 
 import requests
+import requests.packages.urllib3.util.ssl_ 
 from bs4 import BeautifulSoup
 import os
 import re
 import time
-from urllib.request import urlopen
+# from urllib.request import urlopen
 from urllib.error import URLError
 from tsangLibs.GlobalClass import *
 from tsangLibs.WebDriver import *
 
 # meta elements
 # start_url = "https://www.zhihu.com/collection/38624707?page=1"
-start_url = "https://www.zhihu.com/collection/60771406?page=1"
+start_url = "https://www.zhihu.com/collection/51916382"
 headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
 count = GlobalClass()
+# In case of SSLV3_HANDSHAKE_FAILURE
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = 'ALL'
 
 ObjDriver = WebDriver()
 driver = ObjDriver.driver
@@ -60,7 +63,7 @@ def GetAllTheImagesOfCollection(url):
 
 	for address in s:  
 		if(address!=None):	
-			pathName="E:\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名	
+			pathName="F:\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名	
 			download(address,pathName)#下载 
 			print ("正在下载第：",count.z)			
 			count.z=count.z+1#计数君+1
@@ -74,10 +77,11 @@ def GetAllTheImagesOfCollection(url):
 def NextPage(usedUrl):
 	# driver.find_element_by_link_text("下一页").click()
 	driver.find_element_by_xpath("//a[contains(text(),'下一页')]").click()
-	time.sleep(5) # 控制间隔时间，等待浏览器反映
+	time.sleep(4) # 控制间隔时间，等待浏览器反映
 	nextPageUrl = driver.current_url
 	if usedUrl == nextPageUrl:
 		print ("No more new pages or Click failed")
+		exit(0)
 	else:
 		print ("Now we crawl new Page: ",driver.current_url)
 		GetAllTheImagesOfCollection(nextPageUrl)
@@ -92,14 +96,14 @@ def download(_url,name):#下载函数
 	if(_url==None):#地址若为None则跳过	 
 		pass  
 	resDown = requests.get(_url,headers = headers)#打开链接  
-	# time.sleep(0.25) # 时间间隔为0.5s发送一次抓取请求，减轻hoj服务器压力
+	time.sleep(0.4) # 时间间隔为0.5s发送一次抓取请求，减轻hoj服务器压力
 	if (resDown.status_code == 200):
 		data=resDown.content #否则开始下载到本地  
 		with open(name, "wb") as code:
 			code.write(data)
 			code.close()
 	else:
-		print("resDown get error!")
+		print("resDownload get error!")
 
 if __name__ == "__main__":
 
