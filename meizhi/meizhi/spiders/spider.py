@@ -50,14 +50,14 @@ class Spider(scrapy.Spider):
 		
 		yield Request("https://www.zhihu.com/collection/38624707?page=1",headers = self.headers, callback = self.after_login)
 
-	# def __init__(self):
+	def __init__(self):
 		# self.dcap = dict(DesiredCapabilities.PHANTOMJS)
 		# self.dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0")
 		
-		# self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+		self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
 		
-	# def __del__(self):
-		# self.driver.close()
+	def __del__(self):
+		self.driver.close()
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
@@ -88,6 +88,9 @@ class Spider(scrapy.Spider):
 		
 		# start browser
 		# driver = self.driver
+		self.driver.get(response.url)
+		print ("driver current url: ",self.driver.current_url)
+		time.sleep(4)
 		
 		# self.driver.execute_script("window.scrollBy(0,10000)")
 		# time.sleep(1)
