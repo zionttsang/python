@@ -80,26 +80,27 @@ class Spider(scrapy.Spider):
 		# print ("res text: ",response.text.encode("gbk","ignore"))
 		# print ("response: ",response.text.encode("gbk","ignore"))
 		
-		# html = response.text
-		# soup = BeautifulSoup(html)
+		html = response.text
+		soup = BeautifulSoup(html)
 		
-		sel = Selector(response)
+		# sel = Selector(response)
 		item = MeizhiItem()
 		
 		# start browser
 		# driver = self.driver
-		self.driver.get(response.url)
-		print ("driver current url: ",self.driver.current_url)
-		time.sleep(4)
+
+		# res = requests.get(response.url)
+		# print ("requests current url: ",res.url," requests code: ",res.status_code)
+		# time.sleep(4)
 		
 		# self.driver.execute_script("window.scrollBy(0,10000)")
-		# time.sleep(1)
+		# time.sleep(2)
 		# self.driver.execute_script("window.scrollBy(0,20000)")
-		# time.sleep(1)
+		# time.sleep(2)
 		# self.driver.execute_script("window.scrollBy(0,30000)")
-		# time.sleep(1)
+		# time.sleep(2)
 		# self.driver.execute_script("window.scrollBy(0,40000)")
-		# time.sleep(3)
+		# time.sleep(2)
 		
 		# print ("log: ",response.text.encode("gbk","ignore"))
 		# exit(0)
@@ -107,8 +108,15 @@ class Spider(scrapy.Spider):
 		# loading time interval
 		# time.sleep(2)
 
-		for pic_url in sel.xpath("//*[@id='root']/div/main/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/div/span"):
+		lstImg = []#Create listImg Obj
+
+		for linkImg in soup.find_all("img"):
 			print ("in circle")
-			# print ("item: ",pic_url.xpath("/@data-original").extract()[0])			
-			item['image_urls'] = [pic_url.xpath(".//img/@data-original").extract()[0]]
+			addressImg = linkImg.get("data-original")
+			lstImg.append(addressImg)
+
+		s = set(lstImg)
+
+		for image_urls in s:		
+			item['image_urls'] = [image_urls]
 			yield item
