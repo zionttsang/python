@@ -12,7 +12,7 @@ from tsangLibs.WebDriver import *
 
 # meta elements
 # start_url = "https://www.zhihu.com/collection/38624707?page=1"
-start_url = "https://www.zhihu.com/collection/51916382"
+start_url = "https://www.zhihu.com/collection/41659037"
 headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"}
 count = GlobalClass()
 # In case of SSLV3_HANDSHAKE_FAILURE
@@ -63,8 +63,8 @@ def GetAllTheImagesOfCollection(url):
 
 	for address in s:  
 		if(address!=None):	
-			pathName="F:\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名
-			# pathName="\\Volumes\\apple hdd\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名
+			# pathName="F:\\2666\\"+ str(count.z) +".jpg"#设置路径和文件名
+			pathName="/Volumes/apple hdd/2666/"+ str(count.z) +".jpg"#设置路径和文件名
 			download(address,pathName)#下载 
 			print ("正在下载第：",count.z)			
 			count.z=count.z+1#计数君+1
