@@ -12,9 +12,6 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 
-# import meizhi.zhihuLogIn
-# from meizhi.zhihuLogIn import isLogin,login,get_session
-
 class Spider(scrapy.Spider):
 	
 	# 构造 Request headers
@@ -31,41 +28,20 @@ class Spider(scrapy.Spider):
 
 	name = "meizhi"
 	allow_domains = ["https://www.zhihu.com/"]
-	# start_url_head = 'http://www.zhihu.com/#signin'
 		
 	def start_requests(self):
-		# account = input("account: ")
-		# secret = input("password: ")
-		# if meizhi.zhihuLogIn.isLogin():
-			# print ("you have loged in")
-		# else:
-			# print("you need log in now")
-			# meizhi.zhihuLogIn.login(secret,account)
-		
-		# global session
-		# session = meizhi.zhihuLogIn.get_session()
-		# print("now we print session")
-		# print(session)
-		# print("now we finished pirnt session")
-		
 		yield Request("https://www.zhihu.com/collection/38624707?page=1",headers = self.headers, callback = self.after_login)
 
 	def __init__(self):
-		# self.dcap = dict(DesiredCapabilities.PHANTOMJS)
-		# self.dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0")
-		
-		self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+		# self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+
+		self.driver = webdriver.PhantomJS(executable_path = "/Volumes/apple hdd/phantomjs-2.1.1-macosx/bin/phantomjs")
 		
 	def __del__(self):
 		self.driver.close()
 		
 	def after_login(self,response):
 		print ('get in the after_signin')
-		# self.driver.get(response.url)
-		# print("log:",response.text.encode("gbk","ignore"))
-		# exit(0)
-		
-		# item = MeizhiItem()
 		
 		sel = Selector(response)
 		
@@ -77,21 +53,12 @@ class Spider(scrapy.Spider):
 		
 	def parse_answer(self,response):
 		print("get in the parse_answer")
-		# print ("res text: ",response.text.encode("gbk","ignore"))
-		# print ("response: ",response.text.encode("gbk","ignore"))
 		
 		html = response.text
 		soup = BeautifulSoup(html)
 		
 		# sel = Selector(response)
 		item = MeizhiItem()
-		
-		# start browser
-		# driver = self.driver
-
-		# res = requests.get(response.url)
-		# print ("requests current url: ",res.url," requests code: ",res.status_code)
-		# time.sleep(4)
 		
 		# self.driver.execute_script("window.scrollBy(0,10000)")
 		# time.sleep(2)
@@ -101,9 +68,7 @@ class Spider(scrapy.Spider):
 		# time.sleep(2)
 		# self.driver.execute_script("window.scrollBy(0,40000)")
 		# time.sleep(2)
-		
-		# print ("log: ",response.text.encode("gbk","ignore"))
-		# exit(0)
+	
 		
 		# loading time interval
 		# time.sleep(2)
