@@ -76,7 +76,7 @@ class Spider(scrapy.Spider):
 		lstImg = []#Create listImg Obj
 
 		for linkImg in soup.find_all("img"):
-			print ("in circle")
+			# print ("in circle")
 			addressImg = linkImg.get("data-original")
 			lstImg.append(addressImg)
 
