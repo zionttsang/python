@@ -8,32 +8,43 @@
 import requests
 from meizhi import settings
 import os
+import time
+from meizhi import globalClass
 
-class ImageDownloadPipeline(object):
+class meizhiPipeline(object):
+
+	count = globalClass.get_count()
+	
 	def process_item(self, item, spider):
 		print ("we are in the pipe now")
-		if 'image_urls' in item:
-			images = []#定义图片空集
+		dir_path = '%s/%s' % (settings.IMAGES_STORE, spider.name)			
+
+		if not os.path.exists(dir_path):
+			os.makedirs(dir_path)
+		for image_url in item['image_urls']:
 			
-			dir_path = '%s/%s' % (settings.IMAGES_STORE, spider.name)
+			res = requests.get(image_url)
+			time.sleep(1)
 
-			if not os.path.exists(dir_path):
-				os.makedirs(dir_path)
-			for image_url in item['image_urls']:
-				us = image_url.split('/')[3:]
-				image_file_name = '_'.join(us)
-				file_path = '%s/%s' % (dir_path, image_file_name)
-				images.append(file_path)
-				if os.path.exists(file_path):
-					continue
-
-				with open(file_path, 'wb') as handle:
-					response = requests.get(image_url, stream=True)
-					for block in response.iter_content(1024):
-						if not block:
-							break
-
-						handle.write(block)
-
-			item['images'] = images
+			if (res.status_code == 200):
+				binary_img = res.content
+				file_path = dir_path + str(count.z) + ".jpg"
+				count.z = count.z + 1
+				with open(file_path, "wb") as handle:
+					handle.write(binary_img)
+					handle.close()
+			else:
+				print("bad image url")
+				pass
+			
 		return item
+			# with open(file_path, 'wb') as handle:
+			# 	image = requests.get(image_url, stream=True)
+			# 	for block in response.iter_content(1024):
+			# 		if not block:
+			# 			break
+
+			# 		handle.write(block)
+
+			# item['images'] = images
+		
