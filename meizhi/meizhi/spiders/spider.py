@@ -90,3 +90,5 @@ class Spider(scrapy.Spider):
 		
 		# loading time interval
 		# time.sleep(2)
+
+		# test for mac
