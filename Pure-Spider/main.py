@@ -1,9 +1,9 @@
 
 # import zhihuLogIn
 import main_brain
-import urllib.request
-from bs4 import BeautifulSoup
-import globalClass
+# import urllib.request
+# from bs4 import BeautifulSoup
+# import globalClass
 
 # urlFirst = "https://www.zhihu.com/collection/60771406?page=" #daxiong
 urlFirst = "https://www.zhihu.com/collection/38624707?page=" #baozhao

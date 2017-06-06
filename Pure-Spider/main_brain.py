@@ -13,10 +13,9 @@ import time
 #urlFirst = "https://www.zhihu.com/collection/60771406?page=1"#指定的URL
 count = globalClass()
 
-agent = 'Mozilla/5.0 (Windows NT 5.1; rv:33.0) Gecko/20100101 Firefox/33.0'
+agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 headers = {
     "Host": "www.zhihu.com",
-    "Referer": "https://www.zhihu.com/",
     'User-Agent': agent
 }
 
@@ -24,14 +23,17 @@ def GetAllPics(url):
 
 	print('Get in Brain')
 	
-	# resPage = urlopen(url)#打开目标地址  
-	# print("status code: ",resPage.getcode)
-	# respond=resPage.read()#获取网页地址源代码  
-	# resPage.close()
+	# s = requests.session()
+	# login_data = {"email": "zeta221@163.com", "password": "cdefgab"}
+	# r = s.post(url, login_data)
+	# print("code: ", r.status_code)
 
-	respond = requests.post(url, headers = headers)
-	print("status code: ", respond.status_code)
-	soup=BeautifulSoup(respond,"lxml")#实例化一个BeautifulSoup对象	 
+	# exit()
+
+	req = requests.request("GET", url, headers = headers)
+	print("status code: ", req.status_code)
+	soup=BeautifulSoup(req.content,"lxml")\
+
 	lstImg = []#Create listImg Obj
 		
 	print("prepare for the loop")
@@ -47,16 +49,16 @@ def GetAllPics(url):
 		print ("adressLinkFull: ",addressLinkFull) 
 			
 		try:
-			reqAnswer = urlopen(addressLinkFull)
-			# time.sleep(1)
+			reqAnswer = requests.request("GET", addressLinkFull, headers = headers)
+			time.sleep(1)
 		except URLError as e:
 			print("bad path!!")
 			print(e.reason)
 			continue
 		
-		respondImg = reqAnswer.read()
-		reqAnswer.close()
-		soupImg = BeautifulSoup(respondImg)
+		# respondImg = reqAnswer.read()
+		# reqAnswer.close()
+		soupImg = BeautifulSoup(reqAnswer.content, "lxml")
 		
 		for linkImg in soupImg.find_all("img"):
 			addressImg = linkImg.get("data-original")
