@@ -1,41 +1,42 @@
 
 # import zhihuLogIn
 import main_brain
-# import urllib.request
-# from bs4 import BeautifulSoup
-# import globalClass
+from multiprocessing import Process, Lock
+import string
+import global_class
 
-# urlFirst = "https://www.zhihu.com/collection/60771406?page=" #daxiong
-urlFirst = "https://www.zhihu.com/collection/38624707?page=" #baozhao
-pageNum = 67
+class main():
+	def __init__(self, collectionUrl, pageNum):
+	# urlFirst = "https://www.zhihu.com/collection/60771406?page=" #daxiong
+		self.collectionUrl = collectionUrl
+		self.pageNum = pageNum
 
-def main(url):
-	
-	# ==============
-	# Log in Version
-	# ==============
-	# if zhihuLogIn.isLogin():
-	# 	print('您已经登录')
-		
-	# 	for i in range(pageNum):
-	# 		urlTemp = urlFirst + str(i+1)
-	# 		print("urlTemp: ",urlTemp)
-			
-	# 		Main-Brain.AfterLogIn(urlTemp)
-	# else:
-	# 	account = input('请输入你的用户名\n>  ')
-	# 	secret = input("请输入你的密码\n>	")
-	# 	zhihuLogIn.login(secret, account)
+	def main(self):
 
-	# ============
-	# Easy Version
-	# ============
+		# print("Page/s: ", int(pageNum / 10))
+		for i in range(int(self.pageNum / 10) + 1):
+			p = Process(target = self.SingleProcess, args = (i,))
+			p.start()
 
-	for i in range(pageNum):
-		print("Page: ", i + 1)
-		urlThisPage = urlFirst + str(i + 1)
-		main_brain.GetAllPics(urlThisPage)
+	def SingleProcess(self, i):
+		print("Process Num: ", i)
+		for j in range(10):
+			if i != 0:
+				intPage = str((i*10) + j)
+				urlThisPage = self.collectionUrl + str((i*10) + j)
+			else:
+				if j == 9:
+					continue
+				intPage = str(j + 1)
+				urlThisPage = self.collectionUrl + str(j + 1)
 
+			print("urlThisPage: ",urlThisPage)
+			# continue
+			main_brain.GetSinglePageAllPics(urlThisPage, intPage)
+			time.sleep(1)
 		
 if __name__ == '__main__':
-	main(urlFirst)
+	collectionUrl = "https://www.zhihu.com/collection/38624707?page=" #baozhao
+	pageNum = 67
+	cMain = main(collectionUrl, pageNum)
+	cMain.main()
