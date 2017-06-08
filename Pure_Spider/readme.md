@@ -4,7 +4,8 @@ Multi Process.
 
 # Usage：
 ```bash
-admin$ python <urlsOfWhichCollection>
+cd Pure_Spider
+admin$ python main.py <urlsOfWhichCollection>
 ```
 
 # ToDoList
