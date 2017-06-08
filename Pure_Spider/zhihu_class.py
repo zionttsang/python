@@ -6,6 +6,7 @@ import re
 from urllib.error import URLError
 import time
 import lxml
+from lxml import etree
 class zhihu_class:
 	def __init__(self):
 		self.glb = global_class()
@@ -20,7 +21,7 @@ class zhihu_class:
 		strPathNameHeader = self.glb.GetSysPlat()
 		
 		# print("self.headers: ", glb.headers)
-		lstThisPageSrcs = self.GetSinglePageCollectionSrc(url)	
+		lstThisPageSrcs = self.GetSinglePageCollectionSrc(url)
 
 		for address in lstThisPageSrcs:  
 			if(address != None):	
@@ -38,7 +39,7 @@ class zhihu_class:
 		req = requests.request("GET", collectionPageUrl, headers = self.headers)
 		if req.status_code != 200:
 			print("bad req in single page: ", req.status_code)
-			return False
+
 		soup=BeautifulSoup(req.content,"lxml")\
 
 		lstImg = []#Create listImg Obj
@@ -82,10 +83,13 @@ class zhihu_class:
 	def GetTotalPageNum(self, urlCollection):
 		req = requests.get(urlCollection, headers = self.headers)
 		soup = BeautifulSoup(req.content, "html")
-		html = lxml.etree.parse(soup)
-		nodeLastPage = html.xPath('<a href="?page=28">28</a>')
-		totalPageNum = nodeLastPage.Text
+		# html = lxml.etree.parse(req.text)
+		nodeNextPage = soup.find(text = "下一页").find_previous()
+		print("nodeNextPage: ", nodeNextPage)
+		nodeLastPage = nodeNextPage.find_previous().find_previous()
+		print("nodeLastPage: ", nodeLastPage)
+		totalPageNum = nodeLastPage.text
 		print("totalPageNum: ", totalPageNum)
-		exit()
+		# exit()
 		return totalPageNum
 

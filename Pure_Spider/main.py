@@ -14,7 +14,7 @@ import sys
 # 		self.pageNum = pageNum
 cZhi = zhihu_class()
 
-def main(collectionUrl, pageNum):
+def main(collectionUrl):
 	# check page tail
 	if cZhi.IsPageTailExist(collectionUrl) == False:
 		print("Wrong Collection Url")
@@ -25,8 +25,9 @@ def main(collectionUrl, pageNum):
 
 	# check total page num
 	totalPageNum = cZhi.GetTotalPageNum(collectionUrl)
-
-	for i in range(int((int(pageNum) / 10) + 1)):
+	processNum = int((int(totalPageNum) / 10) + 1)
+	print("processNum: ", processNum)
+	for i in range(processNum):
 		p = Process(target = SingleProcess, args = (urlCollectionWithPageTail, i,))
 		p.start()
 
@@ -49,5 +50,5 @@ def SingleProcess(collectionUrl, i):
 		
 if __name__ == '__main__':
 
-	main(sys.argv[1], sys.argv[2])
+	main(sys.argv[1])
 	# print("sys.argv: ",sys.argv[1], sys.argv[2])
