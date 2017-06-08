@@ -33,7 +33,7 @@ class main():
 			print("urlThisPage: ",urlThisPage)
 			# continue
 			main_brain.GetSinglePageAllPics(urlThisPage, intPage)
-			time.sleep(1)
+			# time.sleep(1)
 		
 if __name__ == '__main__':
 	collectionUrl = "https://www.zhihu.com/collection/38624707?page=" #baozhao
