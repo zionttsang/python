@@ -4,7 +4,7 @@ Multi Process.
 
 # Usage：
 ```bash
-cd Pure_Spider
+admin$ cd Pure_Spider
 admin$ python main.py <urlsOfWhichCollection>
 ```
 
