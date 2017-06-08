@@ -1,8 +1,11 @@
-#crawler for zhihu
+# crawler for zhihu
 Written in python.  
 Multi Process.
 
-#Usage：
+# Usage：
 ```bash
 admin$ python <urlsOfWhichCollection>
 ```
+
+# ToDoList
+ProxyPool
