@@ -18,6 +18,8 @@ class global_class:
 		if (strSystem == "Windows"):
 			# self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
 			strPathNameHeader = "E:\\2666\\"
+		elif(strSystem == "Linux"):
+			strPathNameHeader = "/home/tsang/Desktop/2666/"
 		else:
 			# self.driver = webdriver.PhantomJS(executable_path = "/Volumes/apple hdd/phantomjs-2.1.1-macosx/bin/phantomjs")
 

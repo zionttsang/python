@@ -82,7 +82,8 @@ class zhihu_class:
 
 	def GetTotalPageNum(self, urlCollection):
 		req = requests.get(urlCollection, headers = self.headers)
-		soup = BeautifulSoup(req.content, "html")
+		soup = BeautifulSoup(req.content, "lxml")
+		# print(soup)
 		# html = lxml.etree.parse(req.text)
 		nodeNextPage = soup.find(text = "下一页").find_previous()
 		print("nodeNextPage: ", nodeNextPage)

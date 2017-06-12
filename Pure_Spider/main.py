@@ -7,11 +7,8 @@ import global_class
 from zhihu_class import *
 import sys
 
-# class main():
-# 	def __init__(self, collectionUrl, pageNum):
-# 	# urlFirst = "https://www.zhihu.com/collection/60771406?page=" #daxiong
-# 		self.collectionUrl = collectionUrl
-# 		self.pageNum = pageNum
+# https://www.zhihu.com/collection/119998384
+
 cZhi = zhihu_class()
 
 def main(collectionUrl):
