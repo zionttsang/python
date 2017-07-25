@@ -1,14 +1,15 @@
 import requests
 import platform
+import os
 
 class global_class:
 	def __init__(self):
 		self.count = 1
 
-		self.headers = {
-    "Host": "www.zhihu.com",
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-		}
+		# self.headers = {
+  #   "Host": "www.zhihu.com",
+  #   'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+		# }
 
 	def GetSysPlat(self):
 		# print ("init with sys")
@@ -16,14 +17,21 @@ class global_class:
 		strSystem = platform.system()
 		print(strSystem)
 		if (strSystem == "Windows"):
-			# self.driver = webdriver.PhantomJS(executable_path = "D:\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe") 
+			dir_path = "E:\\2666\\"
+			if not os.path.exists(dir_path):
+				os.makedirs(dir_path)
 			strPathNameHeader = "E:\\2666\\"
+
 		elif(strSystem == "Linux"):
+			dir_path = "/home/tsang/Desktop/2666/"
+			if not os.path.exists(dir_path):
+				os.makedirs(dir_path)
 			strPathNameHeader = "/home/tsang/Desktop/2666/"
 		else:
-			# self.driver = webdriver.PhantomJS(executable_path = "/Volumes/apple hdd/phantomjs-2.1.1-macosx/bin/phantomjs")
-
-			strPathNameHeader = "/Volumes/apple hdd/Github/python/Pure_Spider/2666/"
+			dir_path = "/Volumes/apple hdd/2666/2666/"
+			if not os.path.exists(dir_path):
+				os.makedirs(dir_path)
+			strPathNameHeader = "/Volumes/apple hdd/2666/2666/"
 
 		return strPathNameHeader
 
