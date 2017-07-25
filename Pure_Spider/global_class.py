@@ -28,10 +28,10 @@ class global_class:
 				os.makedirs(dir_path)
 			strPathNameHeader = "/home/tsang/Desktop/2666/"
 		else:
-			dir_path = "/Volumes/apple hdd/2666/2666/"
+			dir_path = "/Volumes/applehdd/2666/2666/"
 			if not os.path.exists(dir_path):
 				os.makedirs(dir_path)
-			strPathNameHeader = "/Volumes/apple hdd/2666/2666/"
+			strPathNameHeader = "/Volumes/applehdd/2666/2666/"
 
 		return strPathNameHeader
 
