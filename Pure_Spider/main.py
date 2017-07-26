@@ -1,6 +1,6 @@
 
 # import zhihuLogIn
-import main_brain
+# import main_brain
 from multiprocessing import Process, Lock
 import string
 import global_class
